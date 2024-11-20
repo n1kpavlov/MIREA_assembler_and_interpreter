@@ -12,19 +12,45 @@ class Assembler:
         self.log_root = ET.Element("log")
 
     def load_constant(self, A, B, C):
-        
+        if (A != 36):
+            raise ValueError("Параметр А должен быть равен 36")
+        if not (0 <= B < (1 << 7)):
+            raise ValueError("Адрес B должен быть в пределах от 0 до 2^7-1")
+        if not (0 <= C < (1 << 28)):
+            raise ValueError("Константа C должна быть в пределах от 0 до 2^28-1")
+            
         return bits
 
     def read_memory(self, A, B, C):
-       
+        if (A != 58):
+            raise ValueError("Параметр А должен быть равен 58")
+        if not (0 <= B < (1 << 7)):
+            raise ValueError("Адрес B должен быть в пределах от 0 до 2^7-1")
+        if not (0 <= C < (1 << 13)):
+            raise ValueError("Адрес C должен быть в пределах от 0 до 2^13-1")
+            
         return bits
 
     def write_memory(self, A, B, C):
-        
+        if (A != 25):
+            raise ValueError("Параметр А должен быть равен 25")
+        if not (0 <= B < (1 << 7)):
+            raise ValueError("Адрес B должен быть в пределах от 0 до 2^7-1")
+        if not (0 <= C < (1 << 13)):
+            raise ValueError("Адрес C должен быть в пределах от 0 до 2^13-1")
+            
         return bits
 
     def multiply(self, A, B, C, D):
-        
+        if (A != 32):
+            raise ValueError("Параметр А должен быть равен 32")
+        if not (0 <= B < (1 << 7)):
+            raise ValueError("Адрес B должен быть в пределах от 0 до 2^7-1")
+        if not (0 <= C < (1 << 7)):
+            raise ValueError("Адрес C должен быть в пределах от 0 до 2^7-1")
+        if not (0 <= D < (1 << 7)):
+            raise ValueError("Адрес D должен быть в пределах от 0 до 2^7-1")
+            
         return bits
 
     def assemble(self):
@@ -75,6 +101,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     assembler = Assembler(args.input, args.output, args.log)
-    assembler.assemble()
-    
+    try:
+        assembler.assemble()
+    except ValueError as e:
+        print(e)
     print(f"Ассемблирование выполнено успешно. Выходной файл: {args.output}")
