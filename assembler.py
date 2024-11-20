@@ -132,6 +132,12 @@ class Assembler:
 
         self.to_binary_file()
 
+        log_data = ET.tostring(self.log_root, encoding="unicode", method="xml").encode()
+        dom = xml.dom.minidom.parseString(log_data)
+        log = f'<?xml version="1.0" encoding="utf-8"?>\n' + dom.toprettyxml(newl="\n")[23:]
+        with open(self.log_path, 'w', encoding='utf-8') as f:
+            f.write(log)
+
     def to_binary_file(self):
         with open(self.binary_file_path, "wb") as binary:
             for byte in self.bytes:
