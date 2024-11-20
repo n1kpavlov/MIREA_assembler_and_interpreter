@@ -36,16 +36,32 @@ class Assembler:
                 command, *args = line.split()
 
                 match command:
-                    case "LOAD_CONSTANT":                    
+                    case "LOAD_CONSTANT":
+                        if len(args) != 3:
+                            raise SyntaxError(
+                                f"{line}\nУ операции загрузки константы должно быть 3 аргумента")
+                        
                         self.bytes.append(self.load_constant(int(args[0]), int(args[1]), int(args[2])))
 
                     case "READ_MEMORY":
+                        if len(args) != 3:
+                            raise SyntaxError(
+                                f"{line}\nУ операции чтении из памяти должно быть 3 аргумента")
+                        
                         self.bytes.append(self.read_memory(int(args[0]), int(args[1]), int(args[2])))
 
-                    case "WRITE_MEMORY":                        
+                    case "WRITE_MEMORY":
+                        if len(args) != 3:
+                            raise SyntaxError(
+                                f"{line}\nУ операции чтении из памяти должно быть 3 аргумента")
+                            
                         self.bytes.append(self.write_memory(int(args[0]), int(args[1]), int(args[2])))
 
                     case "MUL":
+                        if len(args) != 4:
+                            raise SyntaxError(
+                                f"{line}\nУ операции умножения должно быть 4 аргумента")
+                        
                         self.bytes.append(self.multiply(int(args[0]), int(args[1]), int(args[2]), int(args[3])))
 
                     case _:
