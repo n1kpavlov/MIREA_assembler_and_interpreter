@@ -101,192 +101,64 @@ py assembler.py <исполняемая_программа.asm> <бинарны�
 py interpreter.py <бинарный_файл_данных.bin> <результат.xml> -lb <левая_граница_диапазона> -rb <правая граница диапазона>
 ```
 # Примерs работы программы
-### Настройка базы данных
-**Входные данные:**
+### Задание для тестовой программы
+Выполнить поэлементно операцию умножение над вектором длины 6 и числом 128. Результат записать в новый вектор. 
+### Тестовая программа
 ```
-*> Configuring the database
-def max_conn = 100
-def timeout = 30
-database {
-    database = struct {
-        host = 19216801,
-        port = 5432,
-        max_connections = [max_conn],
-        connection_timeout = [timeout]
-    }
-}
+LOAD_CONSTANT 36 0 2
+LOAD_CONSTANT 36 1 3
+LOAD_CONSTANT 36 2 4
+LOAD_CONSTANT 36 3 5
+LOAD_CONSTANT 36 4 6
+LOAD_CONSTANT 36 5 7
+LOAD_CONSTANT 36 10 128
+MUL 32 20 0 10
+MUL 32 21 1 10
+MUL 32 22 2 10
+MUL 32 23 3 10
+MUL 32 24 4 10
+MUL 32 25 5 10
 ```
-**Выходные данные (XML):**
-```
-<?xml version="1.0" encoding="utf-8"?>
-<database>
-	<database type="dict">
-		<host type="int">19216801</host>
-		<port type="int">5432</port>
-		<max_connections type="int">100</max_connections>
-		<connection_timeout type="int">30</connection_timeout>
-	</database>
-</database>
-```
-### Конфигурация веб-приложения
-**Входные данные:**
-```
-*> Web Application Configuration
-def max_threads = 8
-web_config {
-    webserver = struct {
-        hostname = 127001,
-        port = 8080,
-        threads = [max_threads],
-        routes = struct {
-            home = 1,
-            login = 2,
-            logout = 3
-        }
-    }
-}
-```
-**Выходные данные (XML):**
+### Данные, записанные в лог-файл
 ```
 <?xml version="1.0" encoding="utf-8"?>
-<web_config>
-	<webserver type="dict">
-		<hostname type="int">127001</hostname>
-		<port type="int">8080</port>
-		<threads type="int">8</threads>
-		<routes type="dict">
-			<home type="int">1</home>
-			<login type="int">2</login>
-			<logout type="int">3</logout>
-		</routes>
-	</webserver>
-</web_config>
+<log>
+	<LOAD_CONSTANT A="36" B="0" C="2">0x24 0x48 0x80 0x00 0x00 0x00</LOAD_CONSTANT>
+	<LOAD_CONSTANT A="36" B="1" C="3">0xa4 0x4c 0xc0 0x00 0x00 0x00</LOAD_CONSTANT>
+	<LOAD_CONSTANT A="36" B="2" C="4">0x24 0x40 0x01 0x10 0x01 0x10</LOAD_CONSTANT>
+	<LOAD_CONSTANT A="36" B="3" C="5">0xa4 0x44 0x41 0x10 0x01 0x10</LOAD_CONSTANT>
+	<LOAD_CONSTANT A="36" B="4" C="6">0x24 0x48 0x82 0x20 0x01 0x10</LOAD_CONSTANT>
+	<LOAD_CONSTANT A="36" B="5" C="7">0xa4 0x4c 0xc2 0x20 0x01 0x10</LOAD_CONSTANT>
+	<LOAD_CONSTANT A="36" B="10" C="128">0x24 0x40 0x05 0x52 0x20 0x00</LOAD_CONSTANT>
+	<MUL A="32" B="20" C="0" D="10">0x20 0x00 0x0a 0xa4 0x40 0x00</MUL>
+	<MUL A="32" B="21" C="1" D="10">0xa0 0x04 0x4a 0xa4 0x40 0x00</MUL>
+	<MUL A="32" B="22" C="2" D="10">0x20 0x08 0x8b 0xb4 0x40 0x00</MUL>
+	<MUL A="32" B="23" C="3" D="10">0xa0 0x0c 0xcb 0xb4 0x40 0x00</MUL>
+	<MUL A="32" B="24" C="4" D="10">0x20 0x00 0x0c 0xc4 0x41 0x10</MUL>
+	<MUL A="32" B="25" C="5" D="10">0xa0 0x04 0x4c 0xc4 0x41 0x10</MUL>
+</log>
 ```
-### Конфигурация системы мониторинга
-**Входные данные:**
-```
-*> Configuration of the monitoring system
-def interval = 15
-def retention = 365
-monitoring_config {
-    monitoring = struct {
-        interval = [interval],
-        retention_days = [retention],
-        services = struct {
-            first = 1,
-            second = 2,
-            third = 3,
-            fourth = 4
-        }
-    }
-}
-```
-**Выходные данные (XML):**
+### Данные, записанные в файл-результат
 ```
 <?xml version="1.0" encoding="utf-8"?>
-<monitoring_config>
-	<monitoring type="dict">
-		<interval type="int">15</interval>
-		<retention_days type="int">365</retention_days>
-		<services type="dict">
-			<first type="int">1</first>
-			<second type="int">2</second>
-			<third type="int">3</third>
-			<fourth type="int">4</fourth>
-		</services>
-	</monitoring>
-</monitoring_config>
+<result>
+	<register address="0">2</register>
+	<register address="1">3</register>
+	<register address="2">4</register>
+	<register address="3">5</register>
+	<register address="4">6</register>
+	<register address="5">7</register>
+	<register address="10">128</register>
+	<register address="20">256</register>
+	<register address="21">384</register>
+	<register address="22">512</register>
+	<register address="23">640</register>
+	<register address="24">768</register>
+	<register address="25">896</register>
+</result>
 ```
 # Результаты тестирования
-### Тест простой конфигурации
+### Тест
 ```
-def test_simple_config(self):
-	input_text = ('config {\n'
-                      '\tsmth = 13\n'
-                      '}\n')
-        expected_output = '<config><smth type="int">13</smth></config>'
-        self.assertEqual(parse_config(input_text), expected_output)
+
 ```
-### Тест словаря
-```
-def test_dict(self):
-	input_text = ('config {\n'
-                      '\tnames = struct {\n'
-                      '\t\tnikita = 1,\n'
-                      '\t\tartem = 2\n'
-                      '\t}\n'
-                      '}\n')
-        expected_output = '<config><names type="dict"><nikita type="int">1</nikita><artem type="int">2</artem></names></config>'
-        self.assertEqual(parse_config(input_text), expected_output)
-```
-### Тест константы
-```
-def test_constant(self):
-        input_text = ('def x = 5\n'
-                      'config {\n'
-                      '\tsmth = [x]\n'
-                      '}\n')
-        expected_output = '<config><smth type="int">5</smth></config>'
-        self.assertEqual(parse_config(input_text), expected_output)
-```
-### Тест комментария
-```
-def test_comment(self):
-        input_text = ('*> comment\n'
-                      'config {\n'
-                      '\tsmth = 10\n'
-                      '}\n')
-        expected_output = '<config><smth type="int">10</smth></config>'
-        self.assertEqual(parse_config(input_text), expected_output)
-```
-### Тест синтаксической ошибки
-```
-def test_syntax_error(self):
-        input_text = ('def x = 5\n'
-                      'config {\n'
-                      '\tsmth = x\n'
-                      '}\n')
-        result = parse_config(input_text)
-        assert "Unexpected Characters" in result
-```
-### Тест использования необъявленной константы
-```
-def test_undefined_constant_error(self):
-        input_text = ('config {\n'
-                      '\tsmth = [undefined_constant]\n'
-                      '}\n')
-        result = parse_config(input_text)
-        assert "В конфигурации использована неизвестная константа по имени undefined_constant" in result
-```
-### Тест повторного объявления константы
-```
-def test_duplicate_constant_error(self):
-        input_text = ('def x = 5\n'
-                      'def x = 10\n'
-                      'config {\n'
-                      '\tsmth = [x]\n'
-                      '}\n')
-        result = parse_config(input_text)
-        assert "Константа x уже объявлена" in result
-```
-### Тест форматированного вывода
-```
-def test_output_xml(self):
-        input_text = ('*> Test comment\n'
-                      'def int = 10\n'
-                      'main {\n'
-                      '\tcombo = struct {\n'
-                      '\t\tnumber = 19216801,\n'
-                      '\tmax_connections = [int]\n'
-                      '\t}\n'
-                      '}\n')
-        expected_output = ('<?xml version="1.0" encoding="utf-8"?>\n'
-                        '<main>\n'
-                        '\t<combo type="dict">\n'
-                        '\t\t<number type="int">19216801</number>\n'
-                        '\t\t<max_connections type="int">10</max_connections>\n'
-                        '\t</combo>\n'
-                        '</main>\n')
-        self.assertEqual(pretty_print_xml(parse_config(input_text)), expected_output)
-```
-![image](https://github.com/user-attachments/assets/4f180366-0af7-44be-81a5-15770bd454dc)
