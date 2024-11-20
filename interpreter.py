@@ -26,7 +26,9 @@ class Interpreter:
                     self.mul()
                 case _:
                     raise ValueError("В бинарном файле содержатся невалидные данные: неверный байт-код")
-                    
+
+        self.make_result()
+
     def load_constant(self):
         B = self.byte_code & ((1 << 7) - 1)
         self.byte_code >>= 7
@@ -89,6 +91,15 @@ class Interpreter:
 
         self.registers[B] = self.registers[C] * self.registers[D]
 
+    def make_result(self):
+        result_root = ET.Element("result")
+        for pos, register in enumerate(self.registers, self.boundaries[0]):
+            if (register != 0):
+                element = ET.SubElement(result_root, "register")
+                element.attrib['address'] = str(pos)
+                element.text = str(register)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("input", help="Входной бинарный файл")
@@ -96,9 +107,9 @@ if __name__ == "__main__":
     parser.add_argument("-lb", "--left_boundary", help="Левая граница памяти", default=0)
     parser.add_argument("-rb", "--right_boundary", help="Правая граница памяти", default=8191)
     args = parser.parse_args()
-    
+
     interpreter = Interpreter(args.input, int(args.left_boundary), int(args.right_boundary), args.output)
-        try:
+    try:
         interpreter.interpret()
     except ValueError as e:
         print(e)
