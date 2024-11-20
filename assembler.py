@@ -21,6 +21,12 @@ class Assembler:
 
         bits = (C << 14) | (B << 7) | A
         bits = bits.to_bytes(6, byteorder="little")
+
+        element = ET.SubElement(self.log_root, 'LOAD_CONSTANT')
+        element.attrib['A'] = str(A)
+        element.attrib['B'] = str(B)
+        element.attrib['C'] = str(C)
+        element.text = bits.hex()
             
         return bits
 
@@ -34,6 +40,12 @@ class Assembler:
 
         bits = (C << 14) | (B << 7) | A
         bits = bits.to_bytes(6, byteorder="little")
+
+        element = ET.SubElement(self.log_root, 'READ_MEMORY')
+        element.attrib['A'] = str(A)
+        element.attrib['B'] = str(B)
+        element.attrib['C'] = str(C)
+        element.text = bits.hex()
             
         return bits
 
@@ -47,6 +59,12 @@ class Assembler:
 
         bits = (C << 14) | (B << 7) | A
         bits = bits.to_bytes(6, byteorder="little")
+
+        element = ET.SubElement(self.log_root, 'WRITE_MEMORY')
+        element.attrib['A'] = str(A)
+        element.attrib['B'] = str(B)
+        element.attrib['C'] = str(C)
+        element.text = bits.hex()
             
         return bits
 
@@ -62,6 +80,13 @@ class Assembler:
 
         bits = (D << 21) | (C << 14) | (B << 7) | A
         bits = bits.to_bytes(6, byteorder="little")
+
+        element = ET.SubElement(self.log_root, 'MUL')
+        element.attrib['A'] = str(A)
+        element.attrib['B'] = str(B)
+        element.attrib['C'] = str(C)
+        element.attrib['D'] = str(D)
+        element.text = bits.hex()
             
         return bits
 
