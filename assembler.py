@@ -18,6 +18,9 @@ class Assembler:
             raise ValueError("Адрес B должен быть в пределах от 0 до 2^7-1")
         if not (0 <= C < (1 << 28)):
             raise ValueError("Константа C должна быть в пределах от 0 до 2^28-1")
+
+        bits = (C << 14) | (B << 7) | A
+        bits = bits.to_bytes(6, byteorder="little")
             
         return bits
 
@@ -28,6 +31,9 @@ class Assembler:
             raise ValueError("Адрес B должен быть в пределах от 0 до 2^7-1")
         if not (0 <= C < (1 << 13)):
             raise ValueError("Адрес C должен быть в пределах от 0 до 2^13-1")
+
+        bits = (C << 14) | (B << 7) | A
+        bits = bits.to_bytes(6, byteorder="little")
             
         return bits
 
@@ -38,6 +44,9 @@ class Assembler:
             raise ValueError("Адрес B должен быть в пределах от 0 до 2^7-1")
         if not (0 <= C < (1 << 13)):
             raise ValueError("Адрес C должен быть в пределах от 0 до 2^13-1")
+
+        bits = (C << 14) | (B << 7) | A
+        bits = bits.to_bytes(6, byteorder="little")
             
         return bits
 
@@ -50,6 +59,9 @@ class Assembler:
             raise ValueError("Адрес C должен быть в пределах от 0 до 2^7-1")
         if not (0 <= D < (1 << 7)):
             raise ValueError("Адрес D должен быть в пределах от 0 до 2^7-1")
+
+        bits = (D << 21) | (C << 14) | (B << 7) | A
+        bits = bits.to_bytes(6, byteorder="little")
             
         return bits
 
