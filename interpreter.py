@@ -33,6 +33,34 @@ class Interpreter:
         C = self.byte_code & ((1 << 28) - 1)
         self.byte_code >>= 34
 
+        self.registers[B] = C
+
+    def read_memory(self):
+        B = self.byte_code & ((1 << 7) - 1)
+        self.byte_code >>= 7
+        C = self.byte_code & ((1 << 13) - 1)
+        self.byte_code >>= 34
+
+        self.registers[B] = self.registers[C]
+
+    def write_memory(self):
+        B = self.byte_code & ((1 << 7) - 1)
+        self.byte_code >>= 7
+        C = self.byte_code & ((1 << 13) - 1)
+        self.byte_code >>= 34
+
+        self.registers[C] = self.registers[B]
+
+    def mul(self):
+        B = self.byte_code & ((1 << 7) - 1)
+        self.byte_code >>= 7
+        C = self.byte_code & ((1 << 7) - 1)
+        self.byte_code >>= 7
+        D = self.byte_code & ((1 << 7) - 1)
+        self.byte_code >>= 27
+
+        self.registers[B] = self.registers[C] * self.registers[D]
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("input", help="Входной бинарный файл")
