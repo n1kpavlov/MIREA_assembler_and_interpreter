@@ -99,6 +99,12 @@ class Interpreter:
                 element.attrib['address'] = str(pos)
                 element.text = str(register)
 
+        log_data = ET.tostring(result_root, encoding="unicode", method="xml").encode()
+        dom = xml.dom.minidom.parseString(log_data)
+        log = f'<?xml version="1.0" encoding="utf-8"?>\n' + dom.toprettyxml(newl="\n")[23:]
+        with open(self.result_path, 'w', encoding='utf-8') as f:
+            f.write(log)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
