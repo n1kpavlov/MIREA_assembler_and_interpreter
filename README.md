@@ -86,21 +86,20 @@ MUL 32 68 90 15
 # Сборка и запуск проекта
 1. Загрузить репозиторий на компьютер
 ```
-git clone https://github.com/n1kpavlov/MIREA_config_converter
+git clone https://github.com/n1kpavlov/MIREA_assembler_and_interpreter
 ```
 2. Прейдите в директорию репозитория
 ```
-cd MIREA_config_converter
+cd MIREA_assembler_and_interpreter
 ```
-3. Запустите скрипт-установщик библиотек script.sh
+3. Запустить assembler.py с указанием исполняемой программы, бинарного файла вывода и лог-файла
 ```
-script.sh
+py assembler.py <исполняемая_программа.asm> <бинарный_файл_вывода.bin> -l <лог-файл.xml>
 ```
-4. Запустить config_converter.py с указанием имени xml файла
+4. Запустить interpreter.py с указанием бинарного файла данных, файла с результатами и диапазона памяти
 ```
-py config_converter.py <имя_файла.xml>
+py interpreter.py <бинарный_файл_данных.bin> <результат.xml> -lb <левая_граница_диапазона> -rb <правая граница диапазона>
 ```
-5. Ввод конфигурации в командную строку. Для завершения ввода использовать ctrl + Z
 # Примерs работы программы
 ### Настройка базы данных
 **Входные данные:**
