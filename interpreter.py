@@ -27,6 +27,12 @@ class Interpreter:
                 case _:
                     raise ValueError("В бинарном файле содержатся невалидные данные: неверный байт-код")
 
+    def load_constant(self):
+        B = self.byte_code & ((1 << 7) - 1)
+        self.byte_code >>= 7
+        C = self.byte_code & ((1 << 28) - 1)
+        self.byte_code >>= 34
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("input", help="Входной бинарный файл")
