@@ -12,6 +12,7 @@ class Assembler:
         self.log_root = ET.Element("log")
 
     def load_constant(self, A, B, C):
+        #Кодирует команду LOAD_CONSTANT в байты
         if (A != 36):
             raise ValueError("Параметр А должен быть равен 36")
         if not (0 <= B < (1 << 7)):
@@ -27,10 +28,11 @@ class Assembler:
         element.attrib['B'] = str(B)
         element.attrib['C'] = str(C)
         element.text = bits.hex()
-            
+
         return bits
 
     def read_memory(self, A, B, C):
+        #Кодирует команду READ_MEMORY в байты
         if (A != 58):
             raise ValueError("Параметр А должен быть равен 58")
         if not (0 <= B < (1 << 7)):
@@ -46,10 +48,11 @@ class Assembler:
         element.attrib['B'] = str(B)
         element.attrib['C'] = str(C)
         element.text = bits.hex()
-            
+
         return bits
 
     def write_memory(self, A, B, C):
+        #Кодирует команду WRITE_MEMORY в байты
         if (A != 25):
             raise ValueError("Параметр А должен быть равен 25")
         if not (0 <= B < (1 << 7)):
@@ -65,10 +68,11 @@ class Assembler:
         element.attrib['B'] = str(B)
         element.attrib['C'] = str(C)
         element.text = bits.hex()
-            
+
         return bits
 
     def multiply(self, A, B, C, D):
+        #Кодирует команду MUL в байты
         if (A != 32):
             raise ValueError("Параметр А должен быть равен 32")
         if not (0 <= B < (1 << 7)):
@@ -87,10 +91,11 @@ class Assembler:
         element.attrib['C'] = str(C)
         element.attrib['D'] = str(D)
         element.text = bits.hex()
-            
+
         return bits
 
     def assemble(self):
+        #Считывает входной файл с кодом и обрабатывает команды в байты
         with open(self.code_path, "rt") as code:
             for line in code:
                 line = line.split('\n')[0].strip()
@@ -103,28 +108,28 @@ class Assembler:
                         if len(args) != 3:
                             raise SyntaxError(
                                 f"{line}\nУ операции загрузки константы должно быть 3 аргумента")
-                        
+
                         self.bytes.append(self.load_constant(int(args[0]), int(args[1]), int(args[2])))
 
                     case "READ_MEMORY":
                         if len(args) != 3:
                             raise SyntaxError(
                                 f"{line}\nУ операции чтении из памяти должно быть 3 аргумента")
-                        
+
                         self.bytes.append(self.read_memory(int(args[0]), int(args[1]), int(args[2])))
 
                     case "WRITE_MEMORY":
                         if len(args) != 3:
                             raise SyntaxError(
                                 f"{line}\nУ операции чтении из памяти должно быть 3 аргумента")
-                            
+
                         self.bytes.append(self.write_memory(int(args[0]), int(args[1]), int(args[2])))
 
                     case "MUL":
                         if len(args) != 4:
                             raise SyntaxError(
                                 f"{line}\nУ операции умножения должно быть 4 аргумента")
-                        
+
                         self.bytes.append(self.multiply(int(args[0]), int(args[1]), int(args[2]), int(args[3])))
 
                     case _:
@@ -142,6 +147,7 @@ class Assembler:
         with open(self.binary_file_path, "wb") as binary:
             for byte in self.bytes:
                 binary.write(byte)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
