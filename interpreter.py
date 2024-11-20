@@ -26,12 +26,16 @@ class Interpreter:
                     self.mul()
                 case _:
                     raise ValueError("В бинарном файле содержатся невалидные данные: неверный байт-код")
-
+                    
     def load_constant(self):
         B = self.byte_code & ((1 << 7) - 1)
         self.byte_code >>= 7
         C = self.byte_code & ((1 << 28) - 1)
         self.byte_code >>= 34
+
+        if not (self.boundaries[0] <= B <= self.boundaries[1]):
+            raise ValueError(
+                "В бинарном файле присутствуют невалидные данные: обращение к ячейки памяти по адресу вне диапазона")
 
         self.registers[B] = C
 
@@ -41,6 +45,13 @@ class Interpreter:
         C = self.byte_code & ((1 << 13) - 1)
         self.byte_code >>= 34
 
+        if not (self.boundaries[0] <= B <= self.boundaries[1]):
+            raise ValueError(
+                "В бинарном файле присутствуют невалидные данные: обращение к ячейки памяти по адресу вне диапазона")
+        if not (self.boundaries[0] <= C <= self.boundaries[1]):
+            raise ValueError(
+                "В бинарном файле присутствуют невалидные данные: обращение к ячейки памяти по адресу вне диапазона")
+
         self.registers[B] = self.registers[C]
 
     def write_memory(self):
@@ -48,6 +59,13 @@ class Interpreter:
         self.byte_code >>= 7
         C = self.byte_code & ((1 << 13) - 1)
         self.byte_code >>= 34
+
+        if not (self.boundaries[0] <= B <= self.boundaries[1]):
+            raise ValueError(
+                "В бинарном файле присутствуют невалидные данные: обращение к ячейки памяти по адресу вне диапазона")
+        if not (self.boundaries[0] <= C <= self.boundaries[1]):
+            raise ValueError(
+                "В бинарном файле присутствуют невалидные данные: обращение к ячейки памяти по адресу вне диапазона")
 
         self.registers[C] = self.registers[B]
 
@@ -58,6 +76,16 @@ class Interpreter:
         self.byte_code >>= 7
         D = self.byte_code & ((1 << 7) - 1)
         self.byte_code >>= 27
+
+        if not (self.boundaries[0] <= B <= self.boundaries[1]):
+            raise ValueError(
+                "В бинарном файле присутствуют невалидные данные: обращение к ячейки памяти по адресу вне диапазона")
+        if not (self.boundaries[0] <= C <= self.boundaries[1]):
+            raise ValueError(
+                "В бинарном файле присутствуют невалидные данные: обращение к ячейки памяти по адресу вне диапазона")
+        if not (self.boundaries[0] <= D <= self.boundaries[1]):
+            raise ValueError(
+                "В бинарном файле присутствуют невалидные данные: обращение к ячейки памяти по адресу вне диапазона")
 
         self.registers[B] = self.registers[C] * self.registers[D]
 
