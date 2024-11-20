@@ -11,6 +11,22 @@ class Interpreter:
         with open(path_to_binary_file, 'rb') as binary_file:
             self.byte_code = int.from_bytes(binary_file.read(), byteorder="little")
 
+    def interpret(self):
+        while self.byte_code != 0:
+            a = self.byte_code & ((1 << 7) - 1)
+            self.byte_code >>= 7
+            match a:
+                case 36:
+                    self.load_constant()
+                case 58:
+                    self.read_memory()
+                case 25:
+                    self.write_memory()
+                case 32:
+                    self.mul()
+                case _:
+                    raise ValueError("В бинарном файле содержатся невалидные данные: неверный байт-код")
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("input", help="Входной бинарный файл")
@@ -20,3 +36,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     interpreter = Interpreter(args.input, int(args.left_boundary), int(args.right_boundary), args.output)
+        try:
+        interpreter.interpret()
+    except ValueError as e:
+        print(e)
+    print(f"Интерпретация выполнена успешно. Результаты сохранены в {args.output}")
