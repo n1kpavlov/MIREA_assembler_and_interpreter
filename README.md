@@ -147,7 +147,200 @@ MUL 32 25 5 10
 </result>
 ```
 # Результаты тестирования
-### Тест
+## Ассемблер
+### Тест загрузки константы
 ```
+def test_load_const(self):
+        filename = 'test_file.asm'
+        binary_file = 'test_bin.bin'
+        log_file = 'test_log.xml'
 
+        with open(filename, 'w') as f:
+            f.write("LOAD_CONSTANT 36 32 12")
+
+        assembler = Assembler(filename, binary_file, log_file)
+        assembler.assemble()
+
+        os.remove(filename)
+        os.remove(binary_file)
+        os.remove(log_file)
+
+        self.assertEqual(assembler.bytes[0].hex(), "241003000000")
 ```
+### Тест чтения из памяти
+```
+def test_read_memory(self):
+        filename = 'test_file.asm'
+        binary_file = 'test_bin.bin'
+        log_file = 'test_log.xml'
+
+        with open(filename, 'w') as f:
+            f.write("READ_MEMORY 58 26 198")
+
+        assembler = Assembler(filename, binary_file, log_file)
+        assembler.assemble()
+
+        os.remove(filename)
+        os.remove(binary_file)
+        os.remove(log_file)
+
+        self.assertEqual(assembler.bytes[0].hex(), "3a8d31000000")
+```
+### Тест записи в память
+```
+def test_write_memory(self):
+        filename = 'test_file.asm'
+        binary_file = 'test_bin.bin'
+        log_file = 'test_log.xml'
+
+        with open(filename, 'w') as f:
+            f.write("WRITE_MEMORY 25 48 919")
+
+        assembler = Assembler(filename, binary_file, log_file)
+        assembler.assemble()
+
+        os.remove(filename)
+        os.remove(binary_file)
+        os.remove(log_file)
+
+        self.assertEqual(assembler.bytes[0].hex(), "19d8e5000000")
+```
+### Тест бинарной операции умножения
+```
+def test_multiply(self):
+        filename = 'test_file.asm'
+        binary_file = 'test_bin.bin'
+        log_file = 'test_log.xml'
+
+        with open(filename, 'w') as f:
+            f.write("MUL 32 68 90 15")
+
+        assembler = Assembler(filename, binary_file, log_file)
+        assembler.assemble()
+
+        os.remove(filename)
+        os.remove(binary_file)
+        os.remove(log_file)
+
+        self.assertEqual(assembler.bytes[0].hex(), "20a2f6010000")
+```
+### Тест ошибки аргумента команды
+```
+def test_value_error(self):
+        filename = 'test_file.asm'
+        binary_file = 'test_bin.bin'
+        log_file = 'test_log.xml'
+
+        with open(filename, 'w') as f:
+            f.write("LOAD_CONSTANT 10 10 10")
+
+        assembler = Assembler(filename, binary_file, log_file)
+        with self.assertRaisesRegex(ValueError, "Параметр А должен быть равен 36"):
+            assembler.assemble()
+
+        os.remove(filename)
+```
+### Тест ошибки определения команды
+```
+def test_syntax_error(self):
+        filename = 'test_file.asm'
+        binary_file = 'test_bin.bin'
+        log_file = 'test_log.xml'
+
+        with open(filename, 'w') as f:
+            f.write("MOV 50")
+
+        assembler = Assembler(filename, binary_file, log_file)
+        with self.assertRaisesRegex(SyntaxError, "Неизвестная команда"):
+            assembler.assemble()
+
+        os.remove(filename)
+```
+## Интерпретатор
+### Тест загрузки константы
+```
+def test_load_const(self):
+        filename = 'test_file.bin'
+        result_file = 'test_result.xml'
+
+        with open(filename, 'wb') as f:
+            f.write(b"\x24\x10\x03\x00\x00\x00")
+
+        interpreter = Interpreter(filename, 0, 9181, result_file)
+        interpreter.interpret()
+
+        os.remove(filename)
+        os.remove(result_file)
+
+        self.assertEqual(interpreter.registers[32], 12)
+```
+### Тест чтения из памяти
+```
+def test_read_memory(self):
+        filename = 'test_file.bin'
+        result_file = 'test_result.xml'
+
+        with open(filename, 'wb') as f:
+            f.write(b"\x3a\x8d\x31\x00\x00\x00")
+
+        interpreter = Interpreter(filename, 0, 9181, result_file)
+        interpreter.interpret()
+
+        os.remove(filename)
+        os.remove(result_file)
+
+        self.assertEqual(interpreter.registers[26], 0)
+```
+### Тест записи в память
+```
+def test_write_memory(self):
+        filename = 'test_file.bin'
+        result_file = 'test_result.xml'
+
+        with open(filename, 'wb') as f:
+            f.write(b"\x19\xd8\xe5\x00\x00\x00")
+
+        interpreter = Interpreter(filename, 0, 9181, result_file)
+        interpreter.interpret()
+
+        os.remove(filename)
+        os.remove(result_file)
+
+        self.assertEqual(interpreter.registers[919], 0)
+```
+### Тест бинарной операции умножения
+```
+def test_multiply(self):
+        filename = 'test_file.bin'
+        result_file = 'test_result.xml'
+
+        with open(filename, 'wb') as f:
+            f.write(b"\x20\xa2\xf6\x01\x00\x00")
+
+        interpreter = Interpreter(filename, 0, 9181, result_file)
+        interpreter.interpret()
+
+        os.remove(filename)
+        os.remove(result_file)
+
+        self.assertEqual(interpreter.registers[68], 0)
+```
+### Тест ошибки определения команды/аргумента
+```
+def test_value_error(self):
+        filename = 'test_file.bin'
+        result_file = 'test_result.xml'
+
+        with open(filename, 'wb') as f:
+            f.write(b"\x01\x00\x00\x00\x00\x00")
+
+        interpreter = Interpreter(filename, 0, 9181, result_file)
+        with self.assertRaisesRegex(ValueError, "В бинарном файле содержатся невалидные данные: неверный байт-код"):
+            interpreter.interpret()
+
+        os.remove(filename)
+
+        self.assertEqual(interpreter.registers[919], 0)
+```
+## Результаты тестирования
+![image](https://github.com/user-attachments/assets/12f47803-d419-4a91-bfa9-e5fdb387e9c1)
