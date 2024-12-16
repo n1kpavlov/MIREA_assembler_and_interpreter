@@ -75,11 +75,11 @@ MUL 32 68 90 15
 # Сборка и запуск проекта
 1. Загрузить репозиторий на компьютер
 ```
-git clone https://github.com/n1kpavlov/MIREA_assembler_and_interpreter
+git clone https://github.com/n1kpavlov/assembler_and_interpreter
 ```
 2. Прейдите в директорию репозитория
 ```
-cd MIREA_assembler_and_interpreter
+cd assembler_and_interpreter
 ```
 3. Запустить assembler.py с указанием исполняемой программы, бинарного файла вывода и лог-файла
 ```
